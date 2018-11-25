@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="account-pages mt-5 mb-5">
+	<div class="row justify-content-center">
+		<div class="col-lg-4">
+			<div class="card">
+				<div class="card-header pt-4 pb-4 text-center bg-primary">
+					{% load static %}
+					<a href="/"><span><img src="{% static "assets/images/logo.png" %}" alt="" height="18"></span></a>
+				</div>
+
+				<div class="card-body p-4">
+					{% if success %}
+					<div class="alert alert-success" role="alert">{{ success }}</div>
+					{% endif %}
+					{% if error %}
+					<div class="alert alert-danger" role="alert">{{ error }}</div>
+					{% endif %}
+					<form action="/" method="post">
+						{% csrf_token %}
+						{% load widget_tweaks %}
+						{{ form.non_field_errors }}
+						<div class="form-group mb-3">
+							{{ form.username.errors }}
+							<label for="{{ form.username.id_for_label }}">Username</label>
+							{{ form.username|add_class:"form-control" }}
+						</div>
+						<div class="form-group mb-3">
+							{{ form.password.errors }}
+							<label for="{{ form.password.id_for_label }}">Password</label>
+							{{ form.password|add_class:"form-control" }}
+						</div>
+						<div class="form-group mb-0 text-center">
+							<input type="submit" class="btn btn-primary" value="Submit">
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div class="text-center mt-5">Not Registered yet? <a href="/register/">Register Now</a></div>
+		</div>
+	</div>
+</div>
+{% endblock %}

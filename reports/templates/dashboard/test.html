@@ -1,0 +1,415 @@
+<html>
+<head>
+  <!--<link rel="stylesheet" type="text/css" href="region.css">-->
+  <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!--https://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js-->
+  <script type='text/javascript'>
+
+   //google.load("visualization", "1", {packages:["corechart"]});
+   //google.setOnLoadCallback(drawChart);
+
+   google.load('visualization', '1', {'packages': ['geomap']});
+   google.setOnLoadCallback(drawMap);
+   	function drawMap() {
+
+
+
+     //result = "{cols: [{id: 'State', label: 'State', type: 'string'},{id: 'Popularity', label: 'Popularity', type: 'int'}],rows: [{c:[{v: 'NG-AB'}, {v: 200},{c:[{v: 'NG-AK'}, {v: 300},{c:[{v: 'NG-AN'}, {v: 400},{c:[{v: 'NG-BA'}, {v: 500},{c:[{v: 'NG-BE'}, {v: 600}]}";
+     result = '{"cols": [{"id": "State", "label": "State", "type": "string"},{"id": "Popularity", "label": "Popularity", "type": "number"}],"rows": [{"c":[{"v": "NG-AB"}, {"v": 200}]}]}';
+
+      var data = new google.visualization.DataTable(result);
+      var options = {};
+      options['region'] = 'NG';
+      options['colors'] = [0xADD8E6, 0x27408B]; //yellow-orange-red colors
+      options['dataMode'] = 'regions';
+      options['resolution'] = 'provinces';
+      options['width'] = $('#nigeria_canvas').parent().width();
+      options['height'] = '500em';
+      options['showLegend'] = true;
+      var container = document.getElementById('nigeria_canvas');
+      var geomap = new google.visualization.GeoMap(container);
+
+      google.visualization.events.addListener(geomap, 'select', function () {
+      var selection = geomap.getSelection();
+      if (selection.length) {
+        //alert(data.getValue(selection[0].row, 0));
+        //drawMap();
+        window.location = 'state/state.html#' + data.getValue(selection[0].row, 0);
+      }
+      });
+
+      geomap.draw(data, options);
+
+    };
+
+   function doNothing(){
+	console.log("Maps Loaded");
+   }
+
+   function drawChart(){
+		//drawIncidentChart();
+		drawCrimeChart();
+		drawHospitalChart();
+		drawFakeProductsChart();
+		drawRoadChart();
+		drawAccidentChart();
+		drawSchoolChart();
+		drawPowerChart();
+		drawPotableWaterChart();
+		drawPetrolPriceChart();
+		drawTransportChart();
+		drawAirportChart();
+		//drawGovtChart();
+		//drawStateChart();
+   };
+
+	function drawIncidentChart(){
+
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/mstats/types/",
+			//data: data,
+			success: function(result){
+				var data = new google.visualization.DataTable(result);
+				var options = {
+				  title: 'Incident Types Report',
+
+				  width: $('#incident_canvas').parent().width(),
+				  height: 500,
+				  //options['is3D'] = true;
+				  isStacked: true
+				};
+				var chart = new google.visualization.BarChart(document.getElementById('incident_canvas'));
+				chart.draw(data, options);
+
+			}
+		});
+	};
+
+	function drawGovtChart(){
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/stats/govt",
+			//data: data,
+			success: function(result){
+				var data = new google.visualization.DataTable(result);
+				var options = {};
+				options['title'] = 'Government Wise Report';
+				options['width'] = $('#nigeria_govts_canvas').parent().width();
+				options['height'] = 500;
+				//options['is3D'] = true;
+				options['isStacked'] = true;
+
+				var chart = new google.visualization.ColumnChart(document.getElementById('nigeria_govts_canvas'));
+				chart.draw(data, options);
+			}
+		});
+	};
+
+
+
+	function drawStateChart(){
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/stats/states",
+			//data: data,
+			success: function(result){
+				var data = new google.visualization.DataTable(result);
+				var options = {};
+				options['title'] = 'State Wise Report';
+				options['width'] = $('#nigeria_states_canvas').parent().width();
+				options['height'] = 500;
+				//options['is3D'] = true;
+				options['isStacked'] = true;
+
+				var chart = new google.visualization.ColumnChart(document.getElementById('nigeria_states_canvas'));
+				chart.draw(data, options);
+			}
+		});
+	};
+
+	function drawAccidentChart(){
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/stats/type/ACCIDENTS",
+			//data: data,
+			success: function(result){
+				var data = new google.visualization.DataTable(result);
+				var options = {};
+				options['title'] = 'Accident Report';
+				options['is3D'] = true;
+
+				var chart = new google.visualization.ColumnChart(document.getElementById('accident_canvas'));
+				chart.draw(data, options);
+			}
+		});
+	};
+
+	function drawFakeProductsChart(){
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/stats/type/FAKE_PRODUCTS",
+			//data: data,
+			success: function(result){
+			    var data = new google.visualization.DataTable(result);
+				var options = {};
+				options['title'] = 'Fake Products Report';
+				options['is3D'] = true;
+
+				var chart = new google.visualization.ColumnChart(document.getElementById('fake_canvas'));
+				chart.draw(data, options);
+			}
+		});
+	};
+
+	function drawHospitalChart(){
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/stats/type/HOSPITALS",
+			//data: data,
+			success: function(result){
+			    var data = new google.visualization.DataTable(result);
+
+				var options = {};
+				options['title'] = 'Hospital Reports';
+				options['is3D'] = true;
+
+				var chart = new google.visualization.ColumnChart(document.getElementById('hospital_canvas'));
+				chart.draw(data, options);
+			}
+		});
+	};
+
+	function drawRoadChart(){
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/stats/type/HOSPITALS",
+			//data: data,
+			success: function(result){
+			    var data = new google.visualization.DataTable(result);
+
+				var options = {};
+				options['title'] = 'Road Report';
+				options['is3D'] = true;
+
+				var chart = new google.visualization.ColumnChart(document.getElementById('road_canvas'));
+				chart.draw(data, options);
+			}
+		});
+	};
+
+	function drawCrimeChart(){
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/stats/type/CRIME",
+			//data: data,
+			success: function(result){
+			    var data = new google.visualization.DataTable(result);
+
+				var options = {};
+				options['title'] = 'Crime Report';
+				options['is3D'] = true;
+
+				var chart = new google.visualization.ColumnChart(document.getElementById('crime_canvas'));
+				chart.draw(data, options);
+			}
+		});
+	};
+
+
+	function drawPowerChart(){
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/stats/type/POWER",
+			//data: data,
+			success: function(result){
+			    var data = new google.visualization.DataTable(result);
+
+				var options = {};
+				options['title'] = 'Power Report';
+				options['is3D'] = true;
+
+				var chart = new google.visualization.ColumnChart(document.getElementById('power_canvas'));
+				chart.draw(data, options);
+			}
+		});
+	};
+
+	function drawPotableWaterChart(){
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/stats/type/POTABLE_WATER",
+			//data: data,
+			success: function(result){
+			    var data = new google.visualization.DataTable(result);
+
+				var options = {};
+				options['title'] = 'Potable Water Report';
+				options['is3D'] = true;
+
+				var chart = new google.visualization.ColumnChart(document.getElementById('potable_canvas'));
+				chart.draw(data, options);
+			}
+		});
+	};
+
+	function drawSchoolChart(){
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/stats/type/SCHOOL",
+			//data: data,
+			success: function(result){
+			    var data = new google.visualization.DataTable(result);
+
+				var options = {};
+				options['title'] = 'School Report';
+				options['is3D'] = true;
+
+				var chart = new google.visualization.ColumnChart(document.getElementById('school_canvas'));
+				chart.draw(data, options);
+			}
+		});
+	};
+
+	function drawPetrolPriceChart(){
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/stats/type/PETROL_PRICE",
+			//data: data,
+			success: function(result){
+			    var data = new google.visualization.DataTable(result);
+
+				var options = {};
+				options['title'] = 'Petrol Price Report';
+				options['is3D'] = true;
+
+				var chart = new google.visualization.ColumnChart(document.getElementById('petrol_canvas'));
+				chart.draw(data, options);
+			}
+		});
+	};
+
+	function drawAirportChart(){
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/stats/type/AIRPORTS",
+			//data: data,
+			success: function(result){
+			    var data = new google.visualization.DataTable(result);
+
+				var options = {};
+				options['title'] = 'Airport Report';
+				options['is3D'] = true;
+
+				var chart = new google.visualization.ColumnChart(document.getElementById('airport_canvas'));
+				chart.draw(data, options);
+			}
+		});
+	};
+
+	function drawTransportChart(){
+		$.ajax({
+			dataType: "json",
+			url: "http://www.ipledge2nigeria.com/service/stats/type/TRANSPORT",
+			//data: data,
+			success: function(result){
+			    var data = new google.visualization.DataTable(result);
+
+				var options = {};
+				options['title'] = 'Transport Report';
+				//options['is3D'] = true;
+
+				var chart = new google.visualization.ColumnChart(document.getElementById('transport_canvas'));
+				chart.draw(data, options);
+			}
+		});
+	};
+
+	function openIncident(opt){
+		window.location = 'http://localhost/ip2nincident.html#' + opt;
+	}
+
+  </script>
+</head>
+
+<body>
+	<table style="width: 100%">
+		<tr>
+			<td style="width: 70%;vertical-align:top">
+
+				<table style="width:100%;table-layout:fixed">
+					<tr><div id='nigeria_canvas' style="display: inline-block; font-size:20px;padding:5px;"></div>
+					</tr>
+
+					<!--<tr>
+						<td><div id='power_canvas' style="margin-top:5px;font-size:20px;padding:5px;">
+						</td>
+						<td><div id='potable_canvas' style="margin-top:5px;font-size:20px;padding:5px;">
+						</td>
+					</tr>
+					<tr>
+						<td><div id='petrol_canvas' style="margin-top:5px;font-size:20px;padding:5px;">
+						</td>
+						<td>
+						</td>
+					</tr>-->
+				</table>
+			</td>
+			<td style="vertical-align:top">
+				<!--<div id='incident_canvas' style="width: 97%; display: inline-block; border:3px solid #8AC007;font-size:20px;padding:5px; height: 500; vertical-align : middle;"></div>-->
+				<!--<div id='crime_canvas' style="width: 20em; border:3px solid #8AC007;margin-top:20px;font-size:20px;padding:5px;"></div>-->
+				<table class="dashboard" style="width:100%">
+
+					<!--<tr>
+						<td>
+							<a href="http://www.dpbolvw.net/kj122tenkem16258B451328778A6" target="_blank"><img src="http://www.lduhtrp.net/ko79p59y31NSORUXQRNPOUTTUWS" border="0" width="100%"></a>
+						</td>
+
+					</tr>-->
+
+					<tr>
+						<td><a href="crime.html">Crime Report</a></td>
+					</tr>
+					<tr>
+						<td><a href="hospitals.html">Hospital Report</a></td>
+					</tr>
+					<tr>
+						<td><a href="fake_products.html">Fake Products Report</a></td>
+					</tr>
+					<tr>
+						<td><a href="roads.html">Road Report</a></td>
+					</tr>
+					<tr>
+						<td><a href="accidents.html">Accidents Report</a></td>
+					</tr>
+					<tr>
+						<td><a href="school.html">School Report</a></td>
+					</tr>
+					<tr>
+						<td><a href="transport.html">Transport Report</a></td>
+					</tr>
+					<tr>
+						<td><a href="airports.html">Airport Report</a></td>
+					</tr>
+					<tr>
+						<td><a href="petrol.html">Petrol Price Report</a></td>
+					</tr>
+					<tr>
+						<td><a href="power.html">Power  Report</a></td>
+					</tr>
+					<tr>
+						<td><a href="water.html">Potable Water Report</a></td>
+					</tr>
+
+
+				</table>
+			</td>
+
+		</tr>
+
+	</table>
+
+</body>
+
+</html>

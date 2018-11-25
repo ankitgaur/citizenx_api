@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+	<html lang="en">
+
+	<head>
+		<meta charset="utf-8" />
+		<title>{{ meta_title }}</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<meta content="{{ meta_description }}" name="description" />
+
+		{% load static %}
+
+		<link rel="shortcut icon" href="{% static "assets/images/favicon.ico" %}">
+
+		<link href="{% static "assets/css/vendor/jquery-jvectormap-1.2.2.css" %}" rel="stylesheet" type="text/css" />
+
+		<link href="{% static "assets/css/icons.min.css" %}" rel="stylesheet" type="text/css" />
+		<link href="{% static "assets/css/app.min.css" %}" rel="stylesheet" type="text/css" />
+		
+		{% block assets_css %}{% endblock %}
+	</head>
+
+	<body class="{{ body_class }}">
+		<div class="wrapper">
+			{% block left_sidebar %}{% endblock %}
+			{% if container_class %}
+			<div class="{{ container_class }}">
+			{% else %}
+			<div class="content-page">
+			{% endif %}
+				<div class="content">
+					{% block content %}{% endblock %}
+				</div>
+
+				<footer class="footer {{ footer_class }}">
+					<div class="container-fluid">
+						<div class="row">
+							{% block footer %}
+							<div class="col-md-6">
+								2018 © CitizenX
+							</div>
+							<div class="col-md-6">
+								<div class="text-md-right footer-links d-none d-md-block">
+									<a href="javascript: void(0);">About</a>
+									<a href="javascript: void(0);">Support</a>
+									<a href="javascript: void(0);">Contact Us</a>
+								</div>
+							</div>
+							{% endblock %}
+						</div>
+					</div>
+				</footer>
+			</div>
+		</div>
+
+		{% block right_sidebar %}{% endblock %}
+
+		<script src="{% static "assets/js/app.min.js" %}"></script>
+
+		<script type='text/javascript' src="https://www.gstatic.com/charts/loader.js"></script>
+		<script src="{% static "assets/js/vendor/Chart.bundle.min.js" %}"></script>
+		<script src="{% static "assets/js/vendor/jquery-jvectormap-1.2.2.min.js" %}"></script>
+		<script src="{% static "assets/js/vendor/jquery-jvectormap-world-mill-en.js" %}"></script>
+		<script src="{% static "assets/js/vendor/jquery-jvectormap-in-mill-en.js" %}"></script>
+
+		{% block assets_js %}{% endblock %}
+	</body>
+
+</html>

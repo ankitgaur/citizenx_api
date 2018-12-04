@@ -172,6 +172,7 @@ class IncidentFilter(View):
 
 				for item in incidents:
 					incident_data.append({
+					    'id': str(item),
 						'category': item.category if 'category' in item else '',
 						'subcategory': item.subcategory if 'subcategory' in item else '',
 						'country': item.country if 'country' in item else '',

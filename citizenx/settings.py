@@ -25,7 +25,7 @@ SECRET_KEY = '+(dc5#-)k0%hjam4%^*9w1_3y_51k^-f+5=)rxp)fjte!o$cqn'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '192.168.1.10']
+ALLOWED_HOSTS = ['www.ipledge2nigeria.net','127.0.0.1', '192.168.1.10','0.0.0.0']
 
 # CORS_ORIGIN_ALLOW_ALL = True
 

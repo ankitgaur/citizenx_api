@@ -10,8 +10,9 @@ class Auth:
 		self.get_response = get_response
 
 	def __call__(self, request):
-		if request.path.find('/api/') != -1 and request.path.find('/login/') == -1 and request.path.find('/register/') == -1:
+		if request.META['REQUEST_METHOD'] != 'GET' and request.path.find('/api/') != -1 and request.path.find('/login/') == -1 and request.path.find('/register/') == -1:
 			# Token validation is here
+
 			payload = {}
 
 			if  request.META['REQUEST_METHOD'] == 'OPTIONS':

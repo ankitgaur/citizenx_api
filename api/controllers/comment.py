@@ -49,6 +49,8 @@ class Comment(View):
 		error = None
 
 		try:
+			self.comment = Model()
+
 			data = json.loads(request.body)
 
 			if 'text' not in data or not data['text']:

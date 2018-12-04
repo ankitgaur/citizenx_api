@@ -50,6 +50,8 @@ class Sentiment(View):
 		status = 200
 
 		try:
+			self.sentiment = Model()
+
 			data = json.loads(request.body)
 
 			if 'sentiment' not in data or not data['sentiment']:
@@ -77,7 +79,7 @@ class Sentiment(View):
 				self.sentiment.date_added = datetime.datetime.now()
 				self.sentiment.date_modified = datetime.datetime.now()
 				self.sentiment.save()
-				
+
 		except Exception as e:
 			error = str(e)
 			status = 400

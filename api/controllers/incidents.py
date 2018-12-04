@@ -51,6 +51,8 @@ class Incident(View):
 		status = 200
 
 		try:
+			self.incident = Model()
+
 			data = json.loads(request.body)
 
 			self.incident.category = data['category']
@@ -64,7 +66,7 @@ class Incident(View):
 			self.incident.date_added = datetime.datetime.now()
 			self.incident.date_modified = datetime.datetime.now()
 			self.incident.save()
-			
+
 		except Exception as e:
 			error = str(e)
 			status = 400

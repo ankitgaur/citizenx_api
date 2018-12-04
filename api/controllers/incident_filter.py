@@ -180,6 +180,8 @@ class IncidentFilter(View):
 						'questions': item.questions if 'questions' in item else '',
 						'rating': item.rating if 'rating' in item else '',
 						'description': item.description if 'description' in item else '',
+						'createdBy': item.user_name if 'user_name' in item else '',
+						'image': str(item.image_id) if 'image_id' in item else None,
 						'createdOn': round(time.mktime(item.date_added.timetuple())) if item.date_added else '' ,
 					})
 			else:

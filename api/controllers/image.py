@@ -61,18 +61,22 @@ class Image(View):
 
 		return self.response(content, status_code = status)
 
-	def post(self, request):
+	def post(self, request, *args, **kwargs):
 		error = ''
 		status = 200
 
 		try:
 			data = request.POST
 
-			if 'incident_id' not in data or not data['incident_id']:
-				error = 'Incident ID is required'
+			if 'id' not in kwargs:
+				error = 'Incident id is required'
 				status = 400
+			#if 'incident_id' not in data or not data['incident_id']:
+			#	error = 'Incident ID is required'
+			#	status = 400
 			else:
-				incident = Incident.objects(id = data['incident_id'])
+				#incident = Incident.objects(id = data['incident_id'])
+				incident = Incident.objects(id = kwargs['id'])
 
 				if incident.count() <= 0:
 					error = 'Invalid Incident ID'
@@ -99,7 +103,7 @@ class Image(View):
 
 			if not error:
 				self.image.image = file
-				self.image.incident_id = data['incident_id']
+				self.image.incident_id = incident['id']
 				self.image.incident_name = incident['category']
 				self.image.user_id = request.session['user_id']
 				self.image.user_name = request.session['user_name']
@@ -117,6 +121,13 @@ class Image(View):
 			'error': error,
 			'id': str(self.image)
 		}
+
+		incident.image_id = content['id']
+		incident.save()
+
+		print(incident)
+		print(content)
+		print(content['error'])
 
 		return self.response(content, status_code = status)
 

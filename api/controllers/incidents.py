@@ -36,6 +36,8 @@ class Incident(View):
 			incident_data['questions'] = item.questions
 			incident_data['rating'] = item.rating
 			incident_data['description'] = item.description
+			incident_data['user_id'] = str(item.user_id)
+			incident_data['createdBy'] = item.user_name
 			incident_data['createdOn'] = round(time.mktime(item.date_added.timetuple()))
 
 		content = {
@@ -63,6 +65,8 @@ class Incident(View):
 			self.incident.questions = data['questions']
 			self.incident.rating = data['rating']
 			self.incident.description = data['description']
+			self.incident.user_id = request.session['user_id']
+			self.incident.user_name = request.session['user_name']
 			self.incident.date_added = datetime.datetime.now()
 			self.incident.date_modified = datetime.datetime.now()
 			self.incident.save()

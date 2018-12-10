@@ -102,6 +102,7 @@ class Image(View):
 				status = 400
 
 			if not error:
+				self.image = Model()
 				self.image.image = file
 				self.image.incident_id = incident['id']
 				self.image.incident_name = incident['category']

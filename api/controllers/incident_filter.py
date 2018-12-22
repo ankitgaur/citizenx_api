@@ -79,12 +79,19 @@ class IncidentFilter(View):
 			else:
 				incidents = Model.objects(**filter)
 
-			if 'distinct' in data:
+			if 'distinct' in data and 'groupby' not in data:
 				incidents = incidents.distinct(data['distinct'])
 
 			if 'groupby' in data:
+				groupby = {}
+
+				groupby['total'] = { '$sum': 1 }
+
+				if 'distinct' in data and len(data['distinct']) > 0:
+					groupby['distinct_value'] = { '$addToSet': '$' + data['distinct'] }
+
 				if data['groupby'] == 'day':
-					groupbyid = {
+					groupby['_id'] = {
 						'make': '$make',
 						'createdOn': {
 							'$dateToString': {
@@ -101,17 +108,14 @@ class IncidentFilter(View):
 							}
 						},
 						{
-							'$group': {
-								'_id': groupbyid,
-								'total': { '$sum': 1 }
-							}
+							'$group': groupby
 						},
 						{
 							'$sort': { 'total': -1 }
 						}
 					]
 				elif data['groupby'] == 'month':
-					groupbyid = {
+					groupby['_id'] = {
 						'make': '$make',
 						'createdMonthYear': {
 							'$dateToString': {
@@ -128,24 +132,18 @@ class IncidentFilter(View):
 							}
 						},
 						{
-							'$group': {
-								'_id': groupbyid,
-								'total': { '$sum': 1 }
-							}
+							'$group': groupby
 						},
 						{
 							'$sort': { 'total': -1 }
 						}
 					]
 				else:
-					groupbyid = '$' + data['groupby']
+					groupby['_id'] = '$' + data['groupby']
 
 					pipeline = [
 						{
-							'$group': {
-								'_id': groupbyid,
-								'total': { '$sum': 1 }
-							}
+							'$group': groupby
 						},
 						{
 							'$sort': { 'total': -1 }
@@ -159,7 +157,8 @@ class IncidentFilter(View):
 				for item in incidents:
 					incident_data.append({
 						data['groupby']: item['_id'] if '_id' in item else '',
-						'total': item['total'] if 'total' in item else 0
+						'distinct_value': item['distinct_value'] if 'distinct_value' in item else [],
+						'total': item['total'] if 'total' in item else 0,
 					})
 
 			#print('Mongo Query', incidents.explain())
@@ -172,7 +171,7 @@ class IncidentFilter(View):
 
 				for item in incidents:
 					incident_data.append({
-					    'id': str(item),
+						'incident_id': str(item.id) if 'id' in item else '',
 						'category': item.category if 'category' in item else '',
 						'subcategory': item.subcategory if 'subcategory' in item else '',
 						'country': item.country if 'country' in item else '',
